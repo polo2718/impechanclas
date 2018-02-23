@@ -110,8 +110,8 @@ problem= createOptimProblem('lsqcurvefit','x0',p0,'objective',@impedance_model_W
     'lb', lb, 'ub', ub, 'xdata', f, 'ydata', [R;X], 'options', options);
 
 %Set a multistart problem to find global minimum
-p=gcp('nocreate');
-if isempty(p)
+par=gcp('nocreate');
+if isempty(par)
     parpool('local');%Use parallel computation
 end
 ms=MultiStart('PlotFcns', [], 'XTolerance', 1E-16, 'UseParallel', true);
