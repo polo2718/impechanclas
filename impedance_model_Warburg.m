@@ -7,12 +7,15 @@
 %--------------------------------------------------------------------------
 %Inputs:
 %p: parameter vector containing the values to fit into the model
-%   -p(1)=Rint: Resistance associated with the double layer [ohms]
-%   -p(2)=Rmedium: Resistance associated with the medium [ohms]
-%   -p(3)=C:  Parameter that defines the double layer capacitance effect [1/s] (this is not an actual capacitor, see my notes)
-%   -p(4)=n:  Parameter that defines the double layer capacitance effect 
-%   $\frac{1}{(j\omega)^nC}$
-%   -p(5)=A: Warburg coefficient
+%   -p(1)=Rint: initial guess for Rint (resistance associated with charge transfer) [ohms]
+%   -p(2)=Rm: initial guess for Rm (resistance associated with medium) [ohms]
+%   -p(3)=C: initial guess for C [F]
+%             This value is associated with the double layer capacitance.
+%   -p(4)=n: initial guess for n
+%             This value is associated with the double layer capacitance.
+%   -p(5)=A: initial guess for A [F]
+%             This value is associated with a warburg impedance  
+%   -p(6)=;: initial guess with a Warburg impedanc
 %-f: frequency values (in a one dimensional column vector) [Hz]
 %Outputs:
 %Calculated impedance values
@@ -28,16 +31,16 @@ function z=modelWarburg(p,f)
   C=p(3);
   n=p(4);
   A=p(5);
-  
+  m=p(6);
   z=zeros(2, length(f)); %initialize model output 
   %Compute model 
   w=2*pi*f; %angular frequency
   
   %Warburg impedance
-  z_w=A./sqrt(w)+A./(1i*sqrt(w));
+  z_w=1./((1i*w).^m.*A);
   %z_w=A./sqrt(1i*w);
   %Double layer capacitance
-  z_c=1./((1i*w).^n*C);
+  z_c=1./((1i*w).^n.*C);
   
   %Compute model impedance
   z_eq=((Rint+z_w).*z_c)./(Rint+z_w+z_c)+Rmedium;
