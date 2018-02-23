@@ -1,4 +1,8 @@
 function impedance_regression_plot(f,R,X, R_model, X_model)
+%Plot non-linear regression results
+%--------------------------------------------------------------------------
+%Usage:
+%impedance_regression_plot(f,R,X, R_model, X_model)
 %--------------------------------------------------------------------------
 %Inputs:
 %-f: 1D column vector with M data points specifying frequency data [Hz].
@@ -12,7 +16,7 @@ function impedance_regression_plot(f,R,X, R_model, X_model)
 %-X_model: estimated reactance using regression model[degrees]
 %
 %--------------------------------------------------------------------------
-%Leopoldo Cendejas Zaragoza 2018
+%Author: Leopoldo Cendejas Zaragoza 2018
 
 figure('DefaultAxesFontSize',14);
 subplot(1,3,1);

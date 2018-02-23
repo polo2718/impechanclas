@@ -3,7 +3,7 @@ function [p,f_clean,R_clean,X_clean,R_model,X_model]=impedance_regression_Warbur
 %The function returns the calculated model parameters as well as the modeled resistance and reactance.
 %--------------------------------------------------------------------------
 %Usage
-%function [p,R_model,X_model]=impedance_regression_Warburg(f,R, X, p0, Rcalibration, lb ,ub)
+%[p,f_clean,R_clean,X_clean,R_model,X_model]]=impedance_regression_Warburg(f,R, X, p0, Rcalibration, lb ,ub)
 %--------------------------------------------------------------------------
 %Requirements
 %This function requires the global optimization toolbox, and the parallel
@@ -27,7 +27,7 @@ function [p,f_clean,R_clean,X_clean,R_model,X_model]=impedance_regression_Warbur
 %             This value is associated with the double layer capacitance.
 %   -p0(5)=A: initial guess for A [F]
 %             This value is associated with a warburg impedance  
-%   -p0(6)=;: initial guess with a Warburg impedance
+%   -p0(6)=m: initial guess with a Warburg impedance
 %-Rcalibration(optional but important): value of calibration resistance
 %   [ohms] This resistance will be subtracted from the observed data points.
 %   (default=0)
@@ -117,11 +117,14 @@ end
 ms=MultiStart('PlotFcns', [], 'XTolerance', 1E-16, 'UseParallel', true);
 %ms=MultiStart('PlotFcns', @gsplotbestf, 'XTolerance', 1E-16, 'UseParallel', true);
 [p, errorOpt]=run(ms, problem,200); %p is a vector tha contains the best fit parameters, errorOpt contains the squared norm error at this point
-disp('error')
-disp(errorOpt)
+disp('error:')
+disp(errorOpt/size(f,1));
 %delete(gcp('nocreate'))
 %Compute R_model and X_model vectors 
 temp=impedance_model_Warburg(p, f);%evaluate the model with the calculated parameters
 R_model=temp(1,:); %compute resistance points according to model parameters
 X_model=temp(2,:); %compute reactance points according to model parameters
+f_clean=f;
+R_clean=R;
+X_clean=X;
 end
